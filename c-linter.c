@@ -58,10 +58,19 @@ int linter(char *file){
 	}
 	char open_p = '(';
 	char close_p = ')';
+	char quotes = '"';
 
 	int line_counter = 1;
+	bool inside_string = false;
 	while(fgets(line, sizeof(line), fp)){
 		for (int i = 0; line[i] != '\0'; i++){
+			if (line[i] == quotes){
+				inside_string = !inside_string;
+				continue;
+			}
+			if (inside_string){
+				continue;
+			}
 			if (line[i] == open_p){
 				push(&stack, line[i]);
 			} else if (line[i] == close_p){
@@ -73,7 +82,7 @@ int linter(char *file){
 					fclose(fp);
 					return -1;
 				}
-			}
+			}  
 		}
 		line_counter++;
 	}
