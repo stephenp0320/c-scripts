@@ -3,7 +3,7 @@
 // Test case 1: Balanced parentheses
 int main() {
     printf("Hello World! (Testing normal brackets)");
-    if (1 == 1) {
+    if (1 == 1 {
         printf("All good here.");
     }
     return 0;
@@ -16,7 +16,7 @@ void extra_close() {
 
 // Test case 3: Missing closing parenthesis (Unbalanced)
 void missing_close() {
-    printf("This one starts an open bracket ( but never finishes it.";
+    printf("This one starts an open bracket ( but never finishes it.");
 }
 
 
