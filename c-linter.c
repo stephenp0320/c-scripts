@@ -4,6 +4,11 @@
 #define MAX_SIZE 100
 
 typedef struct {
+	char tpye;
+	int line;
+} Frame;
+
+typedef struct {
 	int arr[MAX_SIZE];
 	int top;
 } Stack;
@@ -19,7 +24,7 @@ bool isFull(Stack *stack){
 	return stack->top >= MAX_SIZE -1;
 }
 
-void push(Stack *stack, char value){
+void push(Stack *stack, int value){
 	if (isFull(stack)){
 		printf("stack overflow err");
 		return;
@@ -40,15 +45,16 @@ int pop(Stack *stack){
 
 int peek(Stack *stack) {
     if (isEmpty(stack)) {
-        printf("Stack is empty\n");
         return -1;
     }
     return stack->arr[stack->top];
 }
 
 int linter(char *file){
-	Stack stack;
-	initialise(&stack);
+	Stack type_stack;
+	Stack line_stack;
+	initialise(&type_stack);
+	initialise(&line_stack);
 	char line[100];
 	FILE *fp;
 	fp = fopen(file, "r");
@@ -58,6 +64,8 @@ int linter(char *file){
 	}
 	char open_p = '(';
 	char close_p = ')';
+	char open_brace = '{';
+	char close_brace = '}';
 	char quotes = '"';
 
 	int line_counter = 1;
@@ -72,12 +80,27 @@ int linter(char *file){
 				continue;
 			}
 			if (line[i] == open_p){
-				push(&stack, line_counter);
+				push(&type_stack, open_p);
+				push(&line_stack, line_counter);
 			} else if(line[i] == close_p){ 
-				if (!isEmpty(&stack)){
-					pop(&stack);
+				if (!isEmpty(&type_stack) && peek(&type_stack) == open_p){
+					pop(&type_stack);
+					pop(&line_stack);
 				} else {
 					printf("ERROR -> mismatched or extra %c\n", close_p);
+					printf("LINE -> %d\n", line_counter);
+					fclose(fp);
+					return -1;
+				}
+			} else if(line[i] == open_brace){
+				push(&type_stack, open_brace);
+				push(&line_stack, line_counter);
+			} else if (line[i] == close_brace){
+				if (!isEmpty(&type_stack) && peek(&type_stack) == open_brace){
+					pop(&type_stack);
+					pop(&line_stack);
+				} else {
+					printf("ERROR -> mismatched or extra %c\n", close_brace);
 					printf("LINE -> %d\n", line_counter);
 					fclose(fp);
 					return -1;
@@ -87,8 +110,8 @@ int linter(char *file){
 		line_counter++;
 	}
 	fclose(fp);
-	if (!isEmpty(&stack)){
-		printf("ERROR -> missing %c at line: %d\n", close_p, peek(&stack));
+	if (!isEmpty(&line_stack)){
+		printf("ERROR -> missing closing bracket %c found on line: %d\n", peek(&type_stack), peek(&line_stack));
 		return -1;
 	}
 	printf("%s has correct code syntax\n", file);
