@@ -72,9 +72,9 @@ int linter(char *file){
 				continue;
 			}
 			if (line[i] == open_p){
-				push(&stack, line[i]);
-			} else if (line[i] == close_p){
-				if (stack.top >= 0 && stack.arr[stack.top] == open_p){
+				push(&stack, line_counter);
+			} else if(line[i] == close_p){ 
+				if (!isEmpty(&stack)){
 					pop(&stack);
 				} else {
 					printf("ERROR -> mismatched or extra %c\n", close_p);
@@ -82,13 +82,13 @@ int linter(char *file){
 					fclose(fp);
 					return -1;
 				}
-			}  
+			}
 		}
 		line_counter++;
 	}
 	fclose(fp);
 	if (!isEmpty(&stack)){
-		printf("ERROR -> missing %c at EOF\n", close_p);
+		printf("ERROR -> missing %c at line: %d\n", close_p, peek(&stack));
 		return -1;
 	}
 	printf("%s has correct code syntax\n", file);
