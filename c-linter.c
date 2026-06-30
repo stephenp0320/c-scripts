@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#define MAX_SIZE 100
+#define MAX_SIZE 1024
 
 typedef struct {
-	char tpye;
+	char type;
 	int line;
 } Frame;
 
@@ -62,13 +62,14 @@ int linter(char *file){
 		printf("fp err");
 		return -1;
 	}
+
 	char open_p = '(';
 	char close_p = ')';
 	char open_brace = '{';
 	char close_brace = '}';
 	char quotes = '"';
-
 	int line_counter = 1;
+	
 	bool inside_string = false;
 	while(fgets(line, sizeof(line), fp)){
 		for (int i = 0; line[i] != '\0'; i++){
