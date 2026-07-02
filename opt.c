@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#define FILE_SIZE 256
 
 int opt_encrypt(char *input_file){
 	FILE *fp_in;
@@ -20,8 +22,8 @@ int opt_encrypt(char *input_file){
 	FILE *fp_out;
 	FILE *pkey;
 	int r = rand() % 10000;
-	char cipher_file[256];
-	char key_file[256];
+	char cipher_file[FILE_SIZE];
+	char key_file[FILE_SIZE];
 	sprintf(cipher_file, "%s_%d.cipher", input_file, r);
 	fp_out = fopen(cipher_file, "wb");
 	sprintf(key_file, "%s_%d.key", input_file, r); 
@@ -60,7 +62,7 @@ int opt_decrypt(char *encrypted_file, char *key_file){
 	}
 	FILE *fp_out;
 	int r = rand() % 10000;
-	char decrypted_file[256];
+	char decrypted_file[FILE_SIZE];
 	sprintf(decrypted_file, "decripted_file_%d.txt", r);
 	fp_out = fopen(decrypted_file, "wb");
 	if (!fp_out){
@@ -76,7 +78,8 @@ int opt_decrypt(char *encrypted_file, char *key_file){
 			break;
 		}
 		int plain_byte = cipher_byte ^ key_byte;
-		fwrite(&plain_byte, 1, 1, fp_out);
+		unsigned char out_char = (unsigned char)plain_byte;
+		fwrite(&out_char, 1, 1, fp_out);
 	}
 	fclose(fp_cipher);
 	fclose(fp_key);
@@ -85,8 +88,13 @@ int opt_decrypt(char *encrypted_file, char *key_file){
 }
 
 int main(int argc, char *argv[]){
+	srand(time(NULL));
 	char *_e = "-e";
 	char *_d = "-d";
+	if (argc < 2){
+		fprintf(stderr, "Usage:\n  Encrypt: %s -e <file>\n  Decrypt: %s -d <cipher> <key>\n", argv[0], argv[0]);
+		return -1;
+	}
 	char *input = argv[1];
 	if (strcmp(input, _e) == 0){
 		if (argc != 3){
