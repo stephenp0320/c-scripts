@@ -50,8 +50,8 @@ int parser(char *target){
 
 	if (is_swapped){
 		hdr.magic = reverse_bytes(hdr.magic);
-		hdr.version_major = (hdr.version_major >> 8) | (hdr.version_major << 8) & 0xFF00;
-        	hdr.version_minor = (hdr.version_minor >> 8) | (hdr.version_minor << 8) & 0xFF00;
+		hdr.version_major = (hdr.version_major >> 8) | ((hdr.version_major << 8) & 0xFF00);
+        	hdr.version_minor = (hdr.version_minor >> 8) | ((hdr.version_minor << 8) & 0xFF00);
 		hdr.snaplen = reverse_bytes(hdr.snaplen);
         	hdr.network = reverse_bytes(hdr.network);
 	}
