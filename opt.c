@@ -46,6 +46,41 @@ int opt_encrypt(char *input_file){
 }
 
 int opt_decrypt(char *encrypted_file, char *key_file){
+	FILE *fp_cipher;
+	fp_cipher = fopen(encrypted_file, "rb");
+	if (!fp_cipher){
+		fprintf(stderr, "failed to open file\n");
+		return -1;
+	}
+	FILE *fp_key;
+	fp_key = fopen(key_file, "rb");
+	if (!fp_key){
+		fprintf(stderr, "Failed to open key_file\n");
+		return -1;
+	}
+	FILE *fp_out;
+	int r = rand() % 10000;
+	char decrypted_file[256];
+	sprintf(decrypted_file, "decripted_file_%d.txt", r);
+	fp_out = fopen(decrypted_file, "wb");
+	if (!fp_out){
+		fprintf(stderr, "Failed to open decrypted_file\n");
+		return -1;
+	}
+	int cipher_byte;
+	int key_byte;
+
+	while ((cipher_byte = fgetc(fp_cipher)) != EOF){
+		key_byte = fgetc(fp_key);
+		if (key_byte == EOF){
+			break;
+		}
+		int plain_byte = cipher_byte ^ key_byte;
+		fwrite(&plain_byte, 1, 1, fp_out);
+	}
+	fclose(fp_cipher);
+	fclose(fp_key);
+	fclose(fp_out);
 	return 0;
 }
 
