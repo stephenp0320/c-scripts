@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width">
+<title>Wireshark Wiki - Wireshark Wiki</title>
+<link rel="stylesheet" href="https://unpkg.com/simpledotcss@2.2.1/simple.min.css" integrity="sha256-/Utme3wDNP8grTDde+CI/KC1HhcynvqIk4Ql6UtRS6o" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+<div class="logo">
+<a href="/"><img alt="Wireshark logo" src="https://www.wireshark.org/assets/img/wireshark-logo.png"></a>
+</div>
+<h1>Wireshark Wiki</h1>
+</header>
+<main>
+The requested page does not exist. Go to the <a href="/">Main page</a>.
+</main>
+<footer>
+<a href="/">Wireshark Wiki</a>
+</footer>
+</body>
+</html>
