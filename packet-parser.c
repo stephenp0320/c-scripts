@@ -39,9 +39,9 @@ int parser(char *target){
 	}
 	bool is_swapped;
 	if(hdr.magic == swapped_order){
-		is_swapped = false;
-	} else if (hdr.magic == normal_order) {
 		is_swapped = true;
+	} else if (hdr.magic == normal_order) {
+		is_swapped = false;
 	} else {
 		fprintf(stderr, "not a pcap file (magic: %08x)\n", hdr.magic);
     		fclose(fp_tar);
